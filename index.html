@@ -44,6 +44,27 @@ padding-top:15px;
 border-top:1px solid #ddd;
 }
 .hidden{display:none}
+  .logo{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 15px;
+}
+  .login-card{
+    width:100%;
+    max-width:420px;
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,.2);
+}
+  #loginContainer{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
 </style>
 
 <script type="module">
@@ -68,7 +89,7 @@ window.adminLogin = function(){
  const p=document.getElementById("adminPass").value;
 
  if(u==="admin" && p==="smileyadmin123"){
-   document.getElementById("login").classList.add("hidden");
+   document.getElementById("loginContainer").style.display = "none";
    document.getElementById("panel").classList.remove("hidden");
  }else{
    alert("Wrong admin credentials");
@@ -109,12 +130,15 @@ window.deleteStudent = async function(){
 </head>
 <body>
 
-<div id="login" class="card">
-<h1>Admin Login</h1>
+<div id="loginContainer">
+  <div id="login" class="login-card">
+<img src="logo.png" class="logo" alt="Logo">
+<h1>Smiley Tution Center</h1>
 <input id="adminUser" placeholder="Admin Username">
 <input id="adminPass" type="password" placeholder="Admin Password">
 <button onclick="adminLogin()">Login</button>
 </div>
+    </div>
 
 <div id="panel" class="card hidden">
 <h1>Smiley Tution Center Admin</h1>
