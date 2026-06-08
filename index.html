@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smiley Tution Center - Admin</title>
+<link rel="icon" href="logo.png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:Segoe UI,sans-serif;
+background:linear-gradient(135deg,#87CEEB,#FFD54F);
+padding:15px;
+}
+.card{
+max-width:950px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+input,select{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:10px;
+}
+button{
+width:100%;
+padding:12px;
+margin-top:8px;
+border:none;
+border-radius:10px;
+background:#FFD54F;
+font-weight:bold;
+cursor:pointer;
+}
+.section{
+margin-top:20px;
+padding-top:15px;
+border-top:1px solid #ddd;
+}
+.hidden{display:none}
+</style>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBa4VeqtkTiG1DBcT8bb9mrFMoeJtfTfcU",
+  authDomain: "project1-a8022.firebaseapp.com",
+  databaseURL: "https://project1-a8022-default-rtdb.firebaseio.com",
+  projectId: "project1-a8022",
+  storageBucket: "project1-a8022.firebasestorage.app",
+  messagingSenderId: "46609816135",
+  appId: "1:46609816135:web:3c7b21c3c82c05cb682f62"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.adminLogin = function(){
+ const u=document.getElementById("adminUser").value;
+ const p=document.getElementById("adminPass").value;
+
+ if(u==="admin" && p==="smileyadmin123"){
+   document.getElementById("login").classList.add("hidden");
+   document.getElementById("panel").classList.remove("hidden");
+ }else{
+   alert("Wrong admin credentials");
+ }
+}
+
+window.saveStudent = async function(){
+ const username=document.getElementById("username").value.trim().toLowerCase();
+
+ const data={
+   name:document.getElementById("name").value,
+   password:document.getElementById("password").value,
+   feeStatus:document.getElementById("fee").value,
+   tasks:{
+      today:document.getElementById("task").value
+   },
+   weeklyReport:{
+      Mon:Number(document.getElementById("mon").value),
+      Tue:Number(document.getElementById("tue").value),
+      Wed:Number(document.getElementById("wed").value),
+      Thu:Number(document.getElementById("thu").value),
+      Fri:Number(document.getElementById("fri").value),
+      Sat:Number(document.getElementById("sat").value)
+   }
+ };
+
+ await set(ref(db,"students/"+username),data);
+ alert("Student Saved");
+}
+
+window.deleteStudent = async function(){
+ const username=document.getElementById("username").value.trim().toLowerCase();
+ if(!username) return alert("Enter username");
+ await remove(ref(db,"students/"+username));
+ alert("Student Deleted");
+}
+</script>
+</head>
+<body>
+
+<div id="login" class="card">
+<h1>Admin Login</h1>
+<input id="adminUser" placeholder="Admin Username">
+<input id="adminPass" type="password" placeholder="Admin Password">
+<button onclick="adminLogin()">Login</button>
+</div>
+
+<div id="panel" class="card hidden">
+<h1>Smiley Tution Center Admin</h1>
+
+<div class="section">
+<h3>Student Details</h3>
+<input id="username" placeholder="Username">
+<input id="name" placeholder="Student Name">
+<input id="password" placeholder="Password">
+
+<select id="fee">
+<option>Paid</option>
+<option>Pending</option>
+</select>
+
+<input id="task" placeholder="Today's Task">
+</div>
+
+<div class="section">
+<h3>Weekly Report</h3>
+<p>1 = Low, 2 = Medium, 3 = High</p>
+
+<input id="mon" type="number" min="1" max="3" placeholder="Monday">
+<input id="tue" type="number" min="1" max="3" placeholder="Tuesday">
+<input id="wed" type="number" min="1" max="3" placeholder="Wednesday">
+<input id="thu" type="number" min="1" max="3" placeholder="Thursday">
+<input id="fri" type="number" min="1" max="3" placeholder="Friday">
+<input id="sat" type="number" min="1" max="3" placeholder="Saturday">
+</div>
+
+<div class="section">
+<button onclick="saveStudent()">Save / Update Student</button>
+<button onclick="deleteStudent()">Delete Student</button>
+</div>
+
+</div>
+
+</body>
+</html>
